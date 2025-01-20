@@ -29,6 +29,6 @@ writelist([H | T]) :- writelist(T), write(H), nl.
 pathB(Z, Z).
 pathB(X, Y) :- pathB(X, W), move(W, Y).
 
-%prunning and the fact that idk abt trees
+%prunning, no hay nada que evite que Y=X, so it will technicaly be falce on the algorithm, but not really
 pathC(Z, Z).
-pathC(X, Y) :- move(X, Z), move(Z, W), move(W, Y). %Not recursive, so like, get lucky?
+pathC(X, Y) :- move(X, Z), move(Z, W), move(W, Y). 
