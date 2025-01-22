@@ -10,8 +10,8 @@
 (defun prnt (lst)
   (cond
     ((null lst) (format t "No position found~%"))
-    ((not (null lst))
-     (format t "~a " (car lst))
-     (prnt (cdr lst)))))
+    (t
+     (format t "Positions: ~a~%" lst))))
 
-(finding_x 3 '(7 2 7 8 6))
+(finding_x 3 '(7 2 7 8 6 1 9 7 4))
+(finding_x 7 '(7 2 7 8 6 1 9 7 4))
