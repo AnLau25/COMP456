@@ -17,7 +17,7 @@ bi_direction(Y, X):- edge(X, Y).
 findPath(Start_node, Goal_node) :- 
     path(Start_node, Goal_node, [Start_node]).
 
-path(Start_node, Goal_node, L):- bi_direction(Start_node, Goal_node),
+path(Current_node, Goal_node, L):- bi_direction(Current_node, Goal_node),
                                  reverse([Goal_node| L], R), write('Path: '), write(R), nl.
 
 path(Current_node, Goal_node, L) :- bi_direction(Current_node, Z), Z \= Goal_node, \+ member(Z, L), path(Z, Goal_node, [Z | L]).
