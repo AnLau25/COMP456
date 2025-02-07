@@ -19,9 +19,9 @@
             (when (and (member j cnsnts :test #'char-equal)
                          (< (1+ pos) (length word))
                          (member (char word (1+ pos)) cnsnts :test #'char-equal))
+                (setq i 0)
                 (push (coerce (reverse letters) 'string) syllables)
                 (setq letters nil)
-                (setq i 0)
             )
         )
         (when letters
@@ -30,5 +30,5 @@
     )
 )
 
-(split "bumper"); 
-(split "analog"); 
+(split "bumper") 
+(split "analog")
