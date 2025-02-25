@@ -13,13 +13,13 @@
           ((equal side 'w) 'e)))
 
 (defun is_safe (state)
-    (cond ((and (equal (wolf state) (goat state))
-           (not (equal (farmer state) (wolf state))))
-           nil)
-          ((and (equal (goat state) (choux state))
-           (not (equal (farmer state) (goat state))))
-           nil)
-          (t state)))
+  (if (or (and (equal (wolf state) (goat state))
+               (not (equal (farmer state) (wolf state))))
+          (and (equal (goat state) (choux state))
+               (not (equal (farmer state) (goat state)))))
+      nil
+      state))
+
         
 
 (defun takes_self (state)
@@ -52,7 +52,24 @@
                                (opp (choux state)))))
     (t nil)))
 
+(defun path (state goal has_been has_found)
+  (cond ((null state) has_found) 
+        ((equal state goal) (cons (reverse (cons state has_been)) has_found)) 
+        ((member state has_been :test #'equal) has_found)
+        (t (append (path (takes_self state) goal (cons state has_been) has_found)
+                   (path (takes_wolf state) goal (cons state has_been) has_found)
+                   (path (takes_goat state) goal (cons state has_been) has_found)
+                   (path (takes_choux state) goal (cons state has_been) has_found)))))
 
 
+(defun print_found (found)
+  (loop for path in found
+        for i from 1
+        do (format t "~A: ~A~%" i path)))
 
+(defun fwgc (state goal)
+    (let ((found (path state goal nil nil)))
+    (print_found found)))
+
+(fwgc (define_state 'e 'e 'e 'e) (define_state 'w 'w 'w 'w))
 
