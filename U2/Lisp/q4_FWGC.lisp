@@ -61,23 +61,22 @@
                    (path_DFS (takes_goat state) goal (cons state has_been) has_found)
                    (path_DFS (takes_choux state) goal (cons state has_been) has_found)))))
 
-(defun path_BFS (state goal has_been)
-  (let ((queue (list (list state)))  ; Queue initialized with start state path
-        (has_found nil))              ; To collect all found paths
+(defun path_BFS (start goal visited)
+  (let ((queue (list (list start)))
+        (has_found '()))
     (loop while queue do
-      (let* ((current-path (pop queue))  
-             (current-state (car (last current-path))))
-        (unless (member current-state has_been :test #'equal)
-          (push current-state has_been) 
-          (if (equal current-state goal)
-              (push (reverse current-path) has_found) 
-              (dolist (next-state (list (takes_self current-state)
-                                        (takes_wolf current-state)
-                                        (takes_goat current-state)
-                                        (takes_choux current-state)))
-                (when next-state 
-                  (push (append current-path (list next-state)) queue)))))))
-    has_found)) ; Return all found paths
+      (let* ((path (car queue))
+             (state (car (last path))))
+        (setf queue (cdr queue))
+        (cond
+          ((equal state goal)
+           (push path has_found))
+          ((not (member state visited :test #'equal))
+           (setf visited (cons state visited))
+           (dolist (next-state (list (takes_self state) (takes_wolf state) (takes_goat state) (takes_choux state)))
+             (when next-state
+               (setf queue (append queue (list (append path (list next-state)))))))))))
+    has_found));why only 3 and not all?
 
 
 (defun print_found (found)
