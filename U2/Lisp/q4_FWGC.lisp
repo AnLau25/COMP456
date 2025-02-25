@@ -1,3 +1,4 @@
+;World definition
 (defun define_state (f w g c) (list f w g c))
 (defun farmer (state)
     (nth 0 state))
@@ -20,8 +21,7 @@
       nil
       state))
 
-        
-
+;Moves definition
 (defun takes_self (state)
     (define_state (opp (farmer state))
                 (wolf state)
@@ -61,24 +61,25 @@
                    (path_DFS (takes_goat state) goal (cons state has_been) has_found)
                    (path_DFS (takes_choux state) goal (cons state has_been) has_found)))))
 
+;Search algorithms
 (defun path_BFS (start goal visited)
-  (let ((queue (list (list start)))
+  (let ((next_q (list (list start)))
         (has_found '()))
-    (loop while queue do
-      (let* ((path (car queue))
+    (loop while next_q do
+      (let* ((path (car next_q))
              (state (car (last path))))
-        (setf queue (cdr queue))
+        (setf next_q (cdr next_q))
         (cond
           ((equal state goal)
            (push path has_found))
           ((not (member state visited :test #'equal))
            (setf visited (cons state visited))
-           (dolist (next-state (list (takes_self state) (takes_wolf state) (takes_goat state) (takes_choux state)))
-             (when next-state
-               (setf queue (append queue (list (append path (list next-state)))))))))))
+           (dolist (next_state (list (takes_self state) (takes_wolf state) (takes_goat state) (takes_choux state)))
+             (when next_state
+               (setf next_q (append next_q (list (append path (list next_state)))))))))))
     has_found));why only 3 and not all?
 
-
+;Output and init
 (defun print_found (found)
   (loop for path in found
         for i from 1
