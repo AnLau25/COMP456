@@ -93,7 +93,7 @@
     (let ((found2 (path_BFS state goal nil '())))
     (print_found found2)))
 
-(trace path_DFS)
+;(trace path_BFS)
 
-(fwgc (define_state 'e 'e 'e 'e) (define_state 'w 'w 'e 'w))
+(fwgc (define_state 'e 'e 'e 'e) (define_state 'e 'e 'w 'e))
 
