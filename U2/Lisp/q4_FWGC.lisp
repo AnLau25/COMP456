@@ -23,10 +23,10 @@
 
 ;Moves definition
 (defun takes_self (state)
-    (define_state (opp (farmer state))
-                (wolf state)
-                (goat state)
-                (choux state)))
+    (is_safe (define_state (opp (farmer state))
+                           (wolf state)
+                           (goat state)
+                           (choux state))))
 
 (defun takes_wolf (state)
     (cond ((equal (farmer state) (wolf state))
@@ -52,6 +52,7 @@
                                (opp (choux state)))))
     (t nil)))
 
+;Search algorithms
 (defun path_DFS (state goal has_been has_found)
   (cond ((null state) has_found) 
         ((equal state goal) (cons (reverse (cons state has_been)) has_found)) 
@@ -61,10 +62,8 @@
                    (path_DFS (takes_goat state) goal (cons state has_been) has_found)
                    (path_DFS (takes_choux state) goal (cons state has_been) has_found)))))
 
-;Search algorithms
-(defun path_BFS (start goal visited)
-  (let ((next_q (list (list start)))
-        (has_found '()))
+(defun path_BFS (state goal has_been has_found)
+  (let ((next_q (list (list state))))
     (loop while next_q do
       (let* ((path (car next_q))
              (state (car (last path))))
@@ -72,8 +71,8 @@
         (cond
           ((equal state goal)
            (push path has_found))
-          ((not (member state visited :test #'equal))
-           (setf visited (cons state visited))
+          ((not (member state has_been :test #'equal))
+           (setf has_been (cons state has_been))
            (dolist (next_state (list (takes_self state) (takes_wolf state) (takes_goat state) (takes_choux state)))
              (when next_state
                (setf next_q (append next_q (list (append path (list next_state)))))))))))
@@ -87,14 +86,14 @@
 
 (defun fwgc (state goal)
     (format t "DFS:~%")
-    (let ((found1 (path_DFS state goal nil nil)))
+    (let ((found1 (path_DFS state goal nil '())))
     (print_found found1))
     
     (format t "BFS:~%")
-    (let ((found2 (path_BFS state goal nil)))
+    (let ((found2 (path_BFS state goal nil '())))
     (print_found found2)))
 
 (trace path_DFS)
 
-(fwgc (define_state 'e 'e 'e 'e) (define_state 'w 'w 'w 'w))
+(fwgc (define_state 'e 'e 'e 'e) (define_state 'w 'w 'e 'w))
 
