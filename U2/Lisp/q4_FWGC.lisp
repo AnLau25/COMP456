@@ -77,7 +77,7 @@
            (dolist (next_state (list (takes_self state) (takes_wolf state) (takes_goat state) (takes_choux state)))
              (when next_state
                (setf next_q (append next_q (list (append path (list next_state)))))))))))
-    has_found));why only 3 and not all?
+    has_found));i'll take the L explain the difference and call it a day
 
 ;Output and init
 (defun print_found (found)
@@ -93,6 +93,8 @@
     (format t "BFS:~%")
     (let ((found2 (path_BFS state goal nil)))
     (print_found found2)))
+
+(trace path_DFS)
 
 (fwgc (define_state 'e 'e 'e 'e) (define_state 'w 'w 'w 'w))
 
