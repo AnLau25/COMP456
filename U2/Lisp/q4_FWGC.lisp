@@ -95,5 +95,5 @@
 
 ;(trace path_BFS)
 
-(fwgc (define_state 'e 'e 'e 'e) (define_state 'e 'e 'w 'e))
+(fwgc (define_state 'e 'e 'e 'e) (define_state 'w 'w 'w 'w))
 
