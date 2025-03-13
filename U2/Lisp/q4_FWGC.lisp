@@ -1,5 +1,6 @@
 ;World definition
-(defun define_state (f w g c) (list f w g c))
+(defun define_state (f w g c) 
+    (list f w g c))
 (defun farmer (state)
     (nth 0 state))
 (defun wolf (state)
