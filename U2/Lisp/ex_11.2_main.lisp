@@ -1,15 +1,18 @@
-(defun unit_step_funct (x)
+;;Supervicesd learning of binary clasifiers
+
+
+(defun threshold_function, (x) ;;The binary clasifiers??
   (if (>= x 0.0) 1 -1))
 
-(defun dot-product (a b)
+(defun dot-product (a b);;Dot product function.
   (let ((a-list (coerce a 'list))
         (b-list (coerce b 'list)))
-    (cond ((and (null a-list) (null b-list)) 0)
+    (cond ((and (null a-list) (null b-list)) 0);; handles lists and vectors cause yeh
           ((or (null a-list) (null b-list)) (error "Vectors must be of equal length"))
           (t (+ (* (first a-list) (first b-list))
                 (dot-product (rest a-list) (rest b-list)))))))
 
-(defclass perceptron ()
+(defclass perceptron ();;Sets the perceptron class
   ((learning-rate
     :initarg :learning-rate
     :initform 0.01
@@ -28,18 +31,18 @@
     :documentation "Set bias.")
    (activation-funct
     :initarg :activation-funct
-    :initform #'unit_step_funct
+    :initform #'threshold_function,
     :documentation "Set the step function.")))
 
-(defmethod fit ((p perceptron) X y)
-  (let* ((n-samples (length X))
-         (n-features (length (car X)))
-         (weights (make-array n-features :initial-element 0.0))
-         (bias 0)
-         (y_ (mapcar (lambda (yi) (if (> yi 0) 1 -1)) y)))
+(defmethod fit ((p perceptron) X y) ;;learning
+  (let* ((n-samples (length X));;list of testing samples
+         (n-features (length (car X)));; number of fatures, ie number of inputs
+         (weights (make-array n-features :initial-element 0.0));;init weights at 0
+         (bias 0);; init bias at 0
+         (y_ (mapcar (lambda (yi) (if (> yi 0) 1 -1)) y)));; forces y to 1 or -1, in case of 
 
-    (setf (slot-value p 'weights) weights)
-    (setf (slot-value p 'bias) bias)
+    (setf (slot-value p 'weights) weights);;weights as weights
+    (setf (slot-value p 'bias) bias);;bias as bias
 
     (loop for _ from 1 to (slot-value p 'n-iters) do
       (loop for idx from 0 below n-samples
@@ -55,7 +58,7 @@
     (setf (slot-value p 'weights) weights)
     (setf (slot-value p 'bias) bias)))
 
-(defmethod predict ((p perceptron) X)
+(defmethod predict ((p perceptron) X);;predicting 
   (let* ((weights (slot-value p 'weights))
          (bias (slot-value p 'bias))
          (linear-output (+ (dot-product X weights) bias))
@@ -67,6 +70,13 @@
        (y '(1 -1 1 -1 1 -1 -1 1 1 -1))
        (p (make-instance 'perceptron :learning-rate 0.1 :n-iters 10)))
   (fit p X y)
-  (mapcar (lambda (x) (predict p (coerce x 'list))) X))  ;; Convierte x en lista antes de usar predict
+  (mapcar (lambda (x) (predict p (coerce x 'list))) X))  
+;; Convierte x en lista antes de usar predict
 ;;Ask TA if this is it, test it with self velues ig?
 ;;Print predictions???
+
+
+;;Inputs multiply by the weights to return activation function
+;;Diference between output and activation???
+;;You give examples to regulate he values the weights should have (it learns)
+;;Bassed on the examples and the calculated weights, it should be hable to predict activation for future imputs?
