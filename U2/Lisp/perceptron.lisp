@@ -1,7 +1,7 @@
 ;;Supervicesd learning of binary clasifiers
 
 
-(defun threshold_function, (x) ;;The binary clasifiers??
+(defun threshold_function (x) ;;The binary clasifiers??
   (if (>= x 0.0) 1 -1))
 
 (defun dot-product (a b);;Dot product function.
@@ -31,7 +31,7 @@
     :documentation "Set bias.")
    (activation-funct
     :initarg :activation-funct
-    :initform #'threshold_function,
+    :initform #'threshold_function
     :documentation "Set the step function.")))
 
 (defmethod fit ((p perceptron) X y) ;;learning
@@ -48,35 +48,31 @@
       (loop for idx from 0 below n-samples
             for x_i in X
             for y_i in y_ do
-        (let* ((linear-output (+ (dot-product x_i weights) bias))
-               (y-predicted (funcall (slot-value p 'activation-funct) linear-output))
-               (update (* (slot-value p 'learning-rate) (- y_i y-predicted))))
+        (let* ((linear-output (+ (dot-product x_i weights) bias));;linear output
+               (y-predicted (funcall (slot-value p 'activation-funct) linear-output));;activation check
+               (update (* (slot-value p 'learning-rate) (- y_i y-predicted))));;error measure 
           (loop for j from 0 below n-features do
-            (setf (aref weights j) (+ (aref weights j) (* update (nth j x_i)))))
-          (setf bias (+ bias update)))))
-
+            (setf (aref weights j) (+ (aref weights j) (* update (nth j x_i)))));;weight fixing (learning)
+          (setf bias (+ bias update)))));;bias fix
+    ;;stores the new weights and bias 
     (setf (slot-value p 'weights) weights)
     (setf (slot-value p 'bias) bias)))
 
-(defmethod predict ((p perceptron) X);;predicting 
-  (let* ((weights (slot-value p 'weights))
-         (bias (slot-value p 'bias))
-         (linear-output (+ (dot-product X weights) bias))
-         (y-predicted (funcall (slot-value p 'activation-funct) linear-output)))
-    y-predicted))
+(defmethod predict ((p perceptron) X);;predicting ie testing 
+  (let* ((weights (slot-value p 'weights));;int weights
+         (bias (slot-value p 'bias));;init bias
+         (linear-output (+ (dot-product X weights) bias));;linear output caculation
+         (y-predicted (funcall (slot-value p 'activation-funct) linear-output)));;activation check
+    (format t "Prediction: ~A~%" y-predicted)))
 
 (let* ((X '((1.0 1.0) (9.4 6.4) (2.5 2.1) (8.0 7.7) (0.5 2.2) 
             (7.9 8.4) (7.0 7.0) (2.8 0.8) (1.2 3.0) (7.8 6.1)))
        (y '(1 -1 1 -1 1 -1 -1 1 1 -1))
-       (p (make-instance 'perceptron :learning-rate 0.1 :n-iters 10)))
+       (p (make-instance 'perceptron :learning-rate 0.1 :n-iters 1000)))
   (fit p X y)
   (mapcar (lambda (x) (predict p (coerce x 'list))) X))  
-;; Convierte x en lista antes de usar predict
-;;Ask TA if this is it, test it with self velues ig?
-;;Print predictions???
 
-
-;;Inputs multiply by the weights to return activation function
-;;Diference between output and activation???
+;;Inputs multiply by the weights to return output, then put againts activation function
+;;The output is the result of the linear function, then you throw them in the activation check to see what class the input belongs to 
 ;;You give examples to regulate he values the weights should have (it learns)
-;;Bassed on the examples and the calculated weights, it should be hable to predict activation for future imputs?
+;;Bassed on the examples and the calculated weights, it should be hable to predict activation for future imputs
