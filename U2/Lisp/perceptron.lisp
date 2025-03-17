@@ -76,3 +76,5 @@
 ;;The output is the result of the linear function, then you throw them in the activation check to see what class the input belongs to 
 ;;You give examples to regulate he values the weights should have (it learns)
 ;;Bassed on the examples and the calculated weights, it should be hable to predict activation for future imputs
+;;f(net) = f(w1*x1 + w2*x2 + w3*1)
+;;Δwi = c(d − sign(Σxiwi)) xi
