@@ -41,7 +41,7 @@ class Network{
         } 
 
         static double sigmoid_derived(double X){
-            return x * (1.0 - x);
+            return X * (1.0 - X);
         }
 
         
