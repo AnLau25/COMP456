@@ -1,15 +1,16 @@
 %Get_world
-consult('knowledge_farmer.pl').
+:- dynamic fact/1, rule/1, askable/2.
+consult('C:/Users/User/Documents/A_UNI/YOff/Atha/COMP456/U2/Prolog/knowledge_farmer.pl').
 
 
 
 
 
 %Handle_communication_with_user
-abbrev(X, X).
 abbrev(n, no).
 abbrev(y, yes).
 abbrev(q, quit).
+abbrev(X, X).
 
 print_help:-
     writeln('Nano can read the following commands:'), nl,
@@ -43,11 +44,6 @@ interact(explain, _, yes, Moves):- write_Explain(Moves), write('Goal reached!'),
 interact(see_othr, _, no, _).
 interact(see_othr, _, yes, T):- writeln('Here is an alternative solution:'), nl, write_Soln(T).
 
-
-
-
-
-%Handle_questions
 ask(Question, Ans):-
     writeln(Question),
     read(A),
@@ -60,7 +56,7 @@ ask(Question, Ans):-
 
 %Search_algorithm_definition
 search_Engine(One_Soln):-  
-    init_State(I),  
+    fact(init_State(I)),  
     findall((Soln, Moves),  
             dfs([I], ['Initial state'], [], Soln, Moves),  
             Solutions),  
@@ -69,16 +65,16 @@ search_Engine(One_Soln):-
 
 dfs(Path, Inv_Moves, _, Soln, Moves):-
     [H|_] = Path, 
-    goal_State(H),
+    fact(goal_State(H)),
     reverse(Path, Soln),
     reverse(Inv_Moves, Moves).
 
 dfs(Path, Inv_Moves, Visited, Inv_Soln, Moves):-  
     [H|_] = Path,  
-    move(H, Nstate, Current),  
+    rule(move(H, Nstate, Current)),  
     \+ member(Nstate, Visited),  
-    is_safe(Nstate),  
-    is_safe_explained(Nstate, Inv_New_Explained),  
+    fact(is_safe(Nstate)),  
+    fact(is_safe_explained(Nstate, Inv_New_Explained)),  
 
     reverse(Inv_New_Explained, New_Explained),  
     New_Inv_Moves = [New_Explained|Inv_Moves],  
@@ -93,7 +89,7 @@ dfs(Path, Inv_Moves, Visited, Inv_Soln, Moves):-
 
 
 %Solution_display
-writelist([]):- writeln("No more moves.").  %Well_See
+writelist([]).  %Well_See
 writelist([H]):- write(H), write('.'), nl, nl.  
 writelist([H | T]):- write(H), write(','), nl, writelist(T).  
 
@@ -133,7 +129,7 @@ write_Soln([(Soln, Moves)|T]):-
 
 
 %Expert_coms_I_named_it_Nano
-Nano:-
+nano:-
     nl, writeln("Hi! I'm Nano, your puzzle expert system."),
     nl, writeln("Let's solve the Farmer, Wolf, Goat, Cabbage problem together!"),
     print_help,
