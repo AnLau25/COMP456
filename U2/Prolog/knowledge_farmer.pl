@@ -26,32 +26,32 @@ rule(opp(e, w)).
 rule(opp(w, e)).
 
 %Define_posible_moves
-rule(move(state(F1, W1, G1, C1), state(F2, W2, G2, C2), 'Farmer takes self')):-
-    rule(opp(F1, F2)),
-    W1 = W2,
-    G1 = G2,
-    C1 = C2.
+rule(move(state(F, W, G, C), state(Fn, Wn, Gn, Cn), 'Farmer takes self')):-
+    rule(opp(F, Fn)),
+    W = Wn,
+    G = Gn,
+    C = Cn.
 
-rule(move(state(F1, W1, G1, C1), state(F2, W2, G2, C2), 'Farmer takes Wolf')):-
-    F1 = W1,
-    rule(opp(F1, F2)),
-    rule(opp(W1, W2)),
-    G1 = G2,
-    C1 = C2.
+rule(move(state(F, W, G, C), state(Fn, Wn, Gn, Cn), 'Farmer takes Wolf')):-
+    F = W,
+    rule(opp(F, Fn)),
+    rule(opp(W, Wn)),
+    G = Gn,
+    C = Cn.
 
-rule(move(state(F1, W1, G1, C1), state(F2, W2, G2, C2), 'Farmer takes Goat')):-
-    F1 = G1,
-    rule(opp(F1, F2)),
-    W1 = W2,
-    rule(opp(G1, G2)),
-    C1 = C2.
+rule(move(state(F, W, G, C), state(Fn, Wn, Gn, Cn), 'Farmer takes Goat')):-
+    F = G,
+    rule(opp(F, Fn)),
+    W = Wn,
+    rule(opp(G, Gn)),
+    C = Cn.
 
-rule(move(state(F1, W1, G1, C1), state(F2, W2, G2, C2), 'Farmer takes Cabbage')):-
-    F1 = C1,
-    rule(opp(F1, F2)),
-    W1 = W2,
-    G1 = G2,
-    rule(opp(C1, C2)).
+rule(move(state(F, W, G, C), state(Fn, Wn, Gn, Cn), 'Farmer takes Cabbage')):-
+    F = C,
+    rule(opp(F, Fn)),
+    W = Wn,
+    G = Gn,
+    rule(opp(C, Cn)).
 
 %Interactions
 askable(start, 'Start search? (y/n)').
