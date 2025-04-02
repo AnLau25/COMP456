@@ -132,7 +132,7 @@ nano:-
 
     get_kbase,
 
-    query(start, Quest1),
+    query(start, Quest1),%Change and put call directly here
     ask(Quest1, Ans1),
     interact(start, Quest1, Ans1, L),
 
