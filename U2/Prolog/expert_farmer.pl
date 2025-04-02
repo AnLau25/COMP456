@@ -1,15 +1,16 @@
-% Get_world
+%Get_world
 :- use_module(library(readutil)).
 :- dynamic fact/1, rule/1, askable/2.
 
-get_kbase:- repeat, 
+get_kbase:-
     writeln('Input your knowledge base, so we can start:'),
-    read_line_to_string(user_input, File),
-    (exists_file(File)
-    -> (catch(consult(File), _, fail)
-        -> writeln('File consulted, knowledge retreived!'), nl, nl, !
-        ; writeln('Error consulting the file. Please check your path and try again.'), nl, fail)
-    ;writeln('invalid file path. Please try again.'), nl, fail).
+        read_line_to_string(user_input, File),
+        (File == "quit." -> nl, interact(_, _, quit, _); 
+        (exists_file(File) ->
+            (catch(consult(File), _, fail) ->
+                nl, writeln('File consulted, knowledge retrieved!'), nl, nl, !;
+            nl, writeln('Error consulting the file. Please check your path and try again.'), nl, get_kbase);
+            nl, writeln('Invalid file path. Please try again.'), nl, get_kbase)).  
     
 
 
@@ -39,7 +40,7 @@ interact(Question, ExplainQ, help, Arg):-
     ask(ExplainQ, Ans),
     interact(Question, ExplainQ, Ans, Arg).
 
-interact(_, _, quit, _):- writeln('Bye!'), halt.
+interact(_, _, quit, _):- writeln('Bye!'), !, fail.
 interact(start, _, no, _):- interact(_, _, quit, _).
 interact(start, _, yes, L):- search_Engine(L), writeln('Got the solutions!'), nl, nl.
 
@@ -57,37 +58,36 @@ interact(see_othr, _, yes, T):- writeln('Here is an alternative solution:'), nl,
 
 
 
-% Search_algorithm_definition
+%Search_algorithm_definition
 search_Engine(L):-  
     fact(init_State(I)),  
-    setof((Soln, Moves), dfs([I], ['Initial state'], [], Soln, Moves), Solutions),  
+    setof((Soln, Moves), dfs([I], ['Initial state'], Soln, Moves), Solutions),  
     (Solutions \= [] -> L = Solutions ;  
      writeln("No solutions found!"), fail).  
 
-dfs(Path, Inv_Moves, _, Soln, Moves):-
+dfs(Path, Inv_Moves, Soln, Moves):-
     [H|_] = Path, 
     fact(goal_State(H)),
     reverse(Path, Soln),
     reverse(Inv_Moves, Moves).
 
-dfs(Path, Inv_Moves, Visited, Soln, Moves):-  
+dfs(Path, Inv_Moves, Soln, Moves):-  
     [H|_] = Path,  
     rule(move(H, Nstate, Current)),  
-    \+ member(Nstate, Path),
-    \+ member(Nstate, Visited),  
+    \+ member(Nstate, Path),  
     fact(is_safe(Nstate)),  
     fact(is_safe_explained(H, Inv_New_Explained)),  
 
     reverse(Inv_New_Explained, New_Explained),  
     New_Inv_Moves = [New_Explained|Inv_Moves],  
 
-    dfs([Nstate|Path], [Current|New_Inv_Moves], [H|Visited], Soln, Moves).  
+    dfs([Nstate|Path], [Current|New_Inv_Moves], Soln, Moves).  
 
 
 
 
 
-% Solution_display
+%Solution_display
 writelist([]).  
 writelist([H]):- write(H), write('.'), nl, nl.  
 writelist([H | T]):- write(H), write(','), nl, writelist(T).  
@@ -124,10 +124,10 @@ write_Soln([(Soln, Moves)|T]):-
 
 
 
-% Expert_coms._I_named_it_Nano
+%Expert_coms_I_named_it_Nano
 nano:-
     nl, writeln("Hi! I'm Nano, your puzzle expert system."),
-    nl, writeln("Let's solve the Farmer, Wolf, Goat, Cabbage problem together!"),
+    nl, writeln("Let's solve the Farmer, Wolf, Goat, Cabbage problem together!"), nl,
     get_help,
 
     get_kbase,
