@@ -42,7 +42,7 @@ interact(Question, ExplainQ, help, Arg):-
 
 interact(_, _, quit, _):- writeln('Bye!'), !, fail.
 interact(start, _, no, _):- interact(_, _, quit, _).
-interact(start, _, yes, L):- search_Engine(L), writeln('Got the solutions!'), nl, nl.
+interact(start, _, yes, L):- search(L), writeln('Got the solutions!'), nl, nl.
 
 interact(see_sln, _, no, _).
 interact(see_sln, _, yes, L):- writeln('Here is your first solution:'), nl, write_Soln(L).
@@ -59,7 +59,7 @@ interact(see_othr, _, yes, T):- writeln('Here is an alternative solution:'), nl,
 
 
 %Search_algorithm_definition
-search_Engine(L):-  
+search(L):-  
     fact(init_State(I)),  
     setof((Soln, Moves), dfs([I], ['Initial state'], Soln, Moves), Solutions),  
     (Solutions \= [] -> L = Solutions ;  
