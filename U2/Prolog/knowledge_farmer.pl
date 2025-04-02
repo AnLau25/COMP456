@@ -54,7 +54,7 @@ rule(move(state(F, W, G, C), state(Fn, Wn, Gn, Cn), 'Farmer takes Cabbage')):-
     rule(opp(C, Cn)).
 
 %Interactions
-askable(start, 'Start search? (y/n)').
-askable(see_sln, 'See a first solution? (y/n)').
-askable(see_othr, 'See a different solution? (y/n)').
-askable(explain, 'See solution explanation? (y/n)').
+query(start, 'Start search? (y/n)').
+query(see_sln, 'See a first solution? (y/n)').
+query(see_othr, 'See a different solution? (y/n)').
+query(explain, 'See solution explanation? (y/n)').

@@ -1,6 +1,6 @@
 %Get_world
 :- use_module(library(readutil)).
-:- dynamic fact/1, rule/1, askable/2.
+:- dynamic fact/1, rule/1, query/2.
 
 get_kbase:-
     writeln('Input your knowledge base, so we can start:'),
@@ -112,11 +112,11 @@ write_Soln([(Soln, Moves)|T]):-
     write_Soln(Soln, Moves), nl,
     writeln('Goal reached!'), nl, nl,
 
-    askable(explain, ExplainQ),
+    query(explain, ExplainQ),
     ask(ExplainQ, ExplainAns),
     interact(explain, ExplainQ, ExplainAns, Moves),
 
-    askable(see_othr, Question),
+    query(see_othr, Question),
     ask(Question, Ans),
     interact(see_othr, Question, Ans, T).
 
@@ -132,11 +132,11 @@ nano:-
 
     get_kbase,
 
-    askable(start, Quest1),
+    query(start, Quest1),
     ask(Quest1, Ans1),
     interact(start, Quest1, Ans1, L),
 
-    askable(see_sln, Quest2),
+    query(see_sln, Quest2),
     ask(Quest2, Ans2),
     interact(see_sln, Quest2, Ans2, L),
 
