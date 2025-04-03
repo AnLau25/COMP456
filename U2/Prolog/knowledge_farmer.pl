@@ -1,6 +1,10 @@
 %World_definition
-fact(init_State(state(e, e, e, e))).
-fact(goal_State(state(w, w, w, w))).
+fact(init_state(state(e, e, e, e))).
+fact(goal_state(state(w, w, w, w))).
+
+
+
+
 
 %Define_safe_states
 fact(is_safe(state(Farmer, Wolf, Goat, Choux))):-
@@ -21,9 +25,17 @@ fact(is_safe_explained(state(Farmer, Wolf, Goat, Choux), Explain)) :-
         ), Explain)
     ).
 
+
+
+
+
 %Travel_to_opposite_side
 rule(opp(e, w)).
 rule(opp(w, e)).
+
+
+
+
 
 %Define_posible_moves
 rule(move(state(F, W, G, C), state(Fn, Wn, Gn, Cn), 'Farmer takes self')):-
@@ -52,6 +64,10 @@ rule(move(state(F, W, G, C), state(Fn, Wn, Gn, Cn), 'Farmer takes Cabbage')):-
     W = Wn,
     G = Gn,
     rule(opp(C, Cn)).
+
+
+
+
 
 %Interactions
 query(see_sln, 'See a first solution? (y/n)').

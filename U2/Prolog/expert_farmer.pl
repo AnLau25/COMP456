@@ -22,7 +22,7 @@ get_help:-
     writeln('   no.   -> to say no'), nl,
     writeln('   yes.  -> to say yes'), nl,
     writeln('   quit. -> to leave the system'), nl,
-    writeln('   help. -> to have Nano remind you the commands'), nl.
+    writeln('   help. -> to have Nano remind you the commands'), nl, nl.
 
 ask(Question, Ans):-
     writeln(Question),
@@ -58,14 +58,14 @@ interact(explain, _, yes, Solns, Moves):- write_Explain(Solns, Moves), writeln('
 
 %Search_algorithm_definition
 search(L):-  
-    fact(init_State(I)),  
+    fact(init_state(I)),  
     setof((Solns, Moves), dfs([I], ['Initial state'], Solns, Moves), Solutions),  
     (Solutions \= [] -> L = Solutions ;  
      writeln("No solutions found!"), fail).  
 
 dfs(Path, Inv_Moves, Solns, Moves):-
     [H|_] = Path, 
-    fact(goal_State(H)),
+    fact(goal_state(H)),
     reverse(Path, Solns),
     reverse(Inv_Moves, Moves).
 
