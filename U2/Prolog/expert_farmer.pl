@@ -18,10 +18,10 @@ get_kbase:-
 
 %User_Interaction
 get_help:-
-    writeln('Nano can read the following commands:'), nl,
-    writeln('   no.   -> to say no'), nl,
-    writeln('   yes.  -> to say yes'), nl,
-    writeln('   quit. -> to leave the system'), nl,
+    writeln('Nano can read the following commands:'), 
+    writeln('   no.   -> to say no'), 
+    writeln('   yes.  -> to say yes'),
+    writeln('   quit. -> to leave the system'), 
     writeln('   help. -> to have Nano remind you the commands'), nl, nl.
 
 ask(Question, Ans):-
@@ -31,7 +31,7 @@ ask(Question, Ans):-
 
 interact(Question, ExplainQ, Invalid_Ans, Arg):-  
     \+ member(Invalid_Ans, [help, yes, no, quit]),  
-    writeln("Nano's commands only include no, yes, quit and help."), nl,  
+    writeln("Nano's commands only include no, yes, quit and help. Do not forget the '.' at the end"), nl,  
     ask(ExplainQ, Ans),  
     interact(Question, ExplainQ, Ans, Arg).  
 
