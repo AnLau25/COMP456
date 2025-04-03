@@ -40,7 +40,7 @@ interact(Question, ExplainQ, help, Arg):-
     ask(ExplainQ, Ans),
     interact(Question, ExplainQ, Ans, Arg).
 
-interact(_, _, quit, _):- writeln('Bye!'), !, fail.
+interact(_, _, quit, _):- writeln('Bye!'), halt.
 
 interact(see_sln, _, no, _).
 interact(see_sln, _, yes, L):- writeln('Here is your first solution:'), nl, write_Soln(L).
@@ -50,6 +50,7 @@ interact(see_othr, _, yes, []):- write_Soln([]).
 interact(see_othr, _, yes, L):- writeln('Here is an alternative solution:'), nl, write_Soln(L).
 
 interact(explain, _, no, _, _).
+interact(explain, _, quit, _, _):- interact(_, _, quit, _).
 interact(explain, _, yes, Solns, Moves):- write_Explain(Solns, Moves), writeln('Goal reached!'), nl, nl.
 
 
