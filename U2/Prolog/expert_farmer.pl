@@ -49,9 +49,8 @@ interact(see_othr, _, no, _).
 interact(see_othr, _, yes, []):- write_Soln([]).
 interact(see_othr, _, yes, L):- writeln('Here is an alternative solution:'), nl, write_Soln(L).
 
-interact(explain, _, no, _, _).
-interact(explain, _, quit, _, _):- interact(_, _, quit, _).
-interact(explain, _, yes, Solns, Moves):- write_Explain(Solns, Moves), writeln('Goal reached!'), nl, nl.
+interact(explain, _, no, _).
+interact(explain, _, yes, L):- L = [(Solns, Moves)|_], write_Explain(Solns, Moves), writeln('Goal reached!'), nl, nl.
 
 
 
@@ -109,7 +108,7 @@ write_Soln([(Solns, Moves)|T]):-
 
     query(explain, ExplainQ),
     ask(ExplainQ, ExplainAns),
-    interact(explain, ExplainQ, ExplainAns, Solns, Moves),
+    interact(explain, ExplainQ, ExplainAns, [(Solns, Moves)|T]),
 
     query(see_othr, Question),
     ask(Question, Ans),
@@ -138,5 +137,5 @@ nano:-
     interact(see_sln, Quest2, Ans2, L),
 
     writeln('Well, that was fun, see you next time.'), nl, 
-    writeln('Nano, out!'), nl.
+    writeln('Nano, out!'), nl, halt.
 
