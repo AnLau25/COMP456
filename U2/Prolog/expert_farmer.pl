@@ -50,7 +50,7 @@ interact(see_othr, _, yes, []):- write_soln([]).
 interact(see_othr, _, yes, L):- writeln('Here is an alternative solution:'), nl, write_soln(L).
 
 interact(explain, _, no, _).
-interact(explain, _, yes, L):- L = [(Solns, Moves)|_], write_explain(Solns, Moves), writeln('Goal reached!'), nl, nl.
+interact(explain, _, yes, [(Solns, Moves)|_]):- write_explain(Solns, Moves), writeln('Goal reached!'), nl, nl.
 
 
 
