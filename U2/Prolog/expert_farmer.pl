@@ -41,18 +41,16 @@ interact(Question, ExplainQ, help, Arg):-
     interact(Question, ExplainQ, Ans, Arg).
 
 interact(_, _, quit, _):- writeln('Bye!'), !, fail.
-interact(start, _, no, _):- interact(_, _, quit, _).
-interact(start, _, yes, L):- search(L), writeln('Got the solutions!'), nl, nl.
 
 interact(see_sln, _, no, _).
 interact(see_sln, _, yes, L):- writeln('Here is your first solution:'), nl, write_Soln(L).
 
-interact(explain, _, no, _).
-interact(explain, _, yes, Moves):- write_Explain(Moves), writeln('Goal reached!'), nl, nl.
-
 interact(see_othr, _, no, _).
 interact(see_othr, _, yes, []):- write_Soln([]).
-interact(see_othr, _, yes, T):- writeln('Here is an alternative solution:'), nl, write_Soln(T).
+interact(see_othr, _, yes, L):- writeln('Here is an alternative solution:'), nl, write_Soln(L).
+
+interact(explain, _, no, _, _).
+interact(explain, _, yes, Solns, Moves):- write_Explain(Solns, Moves), writeln('Goal reached!'), nl, nl.
 
 
 
@@ -61,27 +59,22 @@ interact(see_othr, _, yes, T):- writeln('Here is an alternative solution:'), nl,
 %Search_algorithm_definition
 search(L):-  
     fact(init_State(I)),  
-    setof((Soln, Moves), dfs([I], ['Initial state'], Soln, Moves), Solutions),  
+    setof((Solns, Moves), dfs([I], ['Initial state'], Solns, Moves), Solutions),  
     (Solutions \= [] -> L = Solutions ;  
      writeln("No solutions found!"), fail).  
 
-dfs(Path, Inv_Moves, Soln, Moves):-
+dfs(Path, Inv_Moves, Solns, Moves):-
     [H|_] = Path, 
     fact(goal_State(H)),
-    reverse(Path, Soln),
+    reverse(Path, Solns),
     reverse(Inv_Moves, Moves).
 
-dfs(Path, Inv_Moves, Soln, Moves):-  
+dfs(Path, Inv_Moves, Solns, Moves):-  
     [H|_] = Path,  
     rule(move(H, Nstate, Current)),  
     \+ member(Nstate, Path),  
-    fact(is_safe(Nstate)),  
-    fact(is_safe_explained(H, Inv_New_Explained)),  
-
-    reverse(Inv_New_Explained, New_Explained),  
-    New_Inv_Moves = [New_Explained|Inv_Moves],  
-
-    dfs([Nstate|Path], [Current|New_Inv_Moves], Soln, Moves).  
+    fact(is_safe(Nstate)),    
+    dfs([Nstate|Path], [Current|Inv_Moves], Solns, Moves).  
 
 
 
@@ -92,29 +85,30 @@ writelist([]).
 writelist([H]):- write(H), write('.'), nl, nl.  
 writelist([H | T]):- write(H), write(','), nl, writelist(T).  
 
-write_Explain([H|[]]):- writeln('So I chose:'), writeln(H), nl.
-write_Explain([Move, Explanation | RestMoves]) :-
+write_Explain(_, [M|[]]):- writeln('So I chose:'), writeln(M), nl.
+write_Explain([S|Solns], [M|Moves]) :-
     writeln('So I chose:'),
-    writeln(Move), nl,
+    writeln(M), nl,
     writeln('I saw:'),
-    writelist(Explanation),
-    write_Explain(RestMoves).
+    fact(is_safe_explained(S, Explain)),
+    writelist(Explain),
+    write_Explain(Solns, Moves).
 
 write_Soln([S|[]], [M|[]]):- write(S), write(': '), write(M), nl.
-write_Soln([S|Solns], [M|[_|Moves]]) :- write(S), write(': '), write(M), nl, write_Soln(Solns, Moves).
+write_Soln([S|Solns], [M|Moves]) :- write(S), write(': '), write(M), nl, write_Soln(Solns, Moves).
 
 write_Soln([]):- writeln('Those were all the solutions found.'), nl.
-write_Soln([(Soln, Moves)|T]):- 
+write_Soln([(Solns, Moves)|T]):- 
     writeln('Sides of the river:'), 
     writeln('We have e = east and w = west for the two shores'), nl,
     writeln('States format:'),
     writeln('state(Farmer, Wolf, Goat, Cabbage)'), nl,
-    write_Soln(Soln, Moves), nl,
+    write_Soln(Solns, Moves), nl,
     writeln('Goal reached!'), nl, nl,
 
     query(explain, ExplainQ),
     ask(ExplainQ, ExplainAns),
-    interact(explain, ExplainQ, ExplainAns, Moves),
+    interact(explain, ExplainQ, ExplainAns, Solns, Moves),
 
     query(see_othr, Question),
     ask(Question, Ans),
@@ -132,9 +126,11 @@ nano:-
 
     get_kbase,
 
-    query(start, Quest1),%Change and put call directly here
-    ask(Quest1, Ans1),
-    interact(start, Quest1, Ans1, L),
+    writeln('Searching...'), nl, nl,
+
+    search(L), sleep(1),
+
+    writeln('Got the solutions!'), nl, nl,
 
     query(see_sln, Quest2),
     ask(Quest2, Ans2),
