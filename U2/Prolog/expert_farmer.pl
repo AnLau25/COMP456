@@ -50,7 +50,7 @@ interact(see_othr, _, yes, []):- write_soln([]).
 interact(see_othr, _, yes, L):- writeln('Here is an alternative solution:'), nl, write_soln(L).
 
 interact(explain, _, no, _).
-interact(explain, _, yes, L):- L = [(Solns, Moves)|_], write_Explain(Solns, Moves), writeln('Goal reached!'), nl, nl.
+interact(explain, _, yes, L):- L = [(Solns, Moves)|_], write_explain(Solns, Moves), writeln('Goal reached!'), nl, nl.
 
 
 
@@ -85,14 +85,14 @@ writelist([]).
 writelist([H]):- write(H), write('.'), nl, nl.  
 writelist([H | T]):- write(H), write(','), nl, writelist(T).  
 
-write_Explain(_, [M|[]]):- writeln('So I chose:'), writeln(M), nl.
-write_Explain([S|Solns], [M|Moves]) :-
+write_explain(_, [M|[]]):- writeln('So I chose:'), writeln(M), nl.
+write_explain([S|Solns], [M|Moves]) :-
     writeln('So I chose:'),
     writeln(M), nl,
     writeln('I saw:'),
     fact(is_safe_explained(S, Explain)),
     writelist(Explain),
-    write_Explain(Solns, Moves).
+    write_explain(Solns, Moves).
 
 write_soln([S|[]], [M|[]]):- write(S), write(': '), write(M), nl.
 write_soln([S|Solns], [M|Moves]) :- write(S), write(': '), write(M), nl, write_soln(Solns, Moves).
