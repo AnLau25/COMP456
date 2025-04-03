@@ -43,11 +43,11 @@ interact(Question, ExplainQ, help, Arg):-
 interact(_, _, quit, _):- writeln('Bye!'), halt.
 
 interact(see_sln, _, no, _).
-interact(see_sln, _, yes, L):- writeln('Here is your first solution:'), nl, write_Soln(L).
+interact(see_sln, _, yes, L):- writeln('Here is your first solution:'), nl, write_soln(L).
 
 interact(see_othr, _, no, _).
-interact(see_othr, _, yes, []):- write_Soln([]).
-interact(see_othr, _, yes, L):- writeln('Here is an alternative solution:'), nl, write_Soln(L).
+interact(see_othr, _, yes, []):- write_soln([]).
+interact(see_othr, _, yes, L):- writeln('Here is an alternative solution:'), nl, write_soln(L).
 
 interact(explain, _, no, _).
 interact(explain, _, yes, L):- L = [(Solns, Moves)|_], write_Explain(Solns, Moves), writeln('Goal reached!'), nl, nl.
@@ -94,16 +94,16 @@ write_Explain([S|Solns], [M|Moves]) :-
     writelist(Explain),
     write_Explain(Solns, Moves).
 
-write_Soln([S|[]], [M|[]]):- write(S), write(': '), write(M), nl.
-write_Soln([S|Solns], [M|Moves]) :- write(S), write(': '), write(M), nl, write_Soln(Solns, Moves).
+write_soln([S|[]], [M|[]]):- write(S), write(': '), write(M), nl.
+write_soln([S|Solns], [M|Moves]) :- write(S), write(': '), write(M), nl, write_soln(Solns, Moves).
 
-write_Soln([]):- writeln('Those were all the solutions found.'), nl.
-write_Soln([(Solns, Moves)|T]):- 
+write_soln([]):- writeln('Those were all the solutions found.'), nl.
+write_soln([(Solns, Moves)|T]):- 
     writeln('Sides of the river:'), 
     writeln('We have e = east and w = west for the two shores'), nl,
     writeln('States format:'),
     writeln('state(Farmer, Wolf, Goat, Cabbage)'), nl,
-    write_Soln(Solns, Moves), nl,
+    write_soln(Solns, Moves), nl,
     writeln('Goal reached!'), nl, nl,
 
     query(explain, ExplainQ),
